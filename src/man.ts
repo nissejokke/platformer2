@@ -61,9 +61,4 @@ export class Man implements Objct {
     this.context.ctx.fillRect(this.x + this.width / 5, this.y + this.height / 10, this.width / 5, this.height / 10);
 
   }
-
-  move(dx: number, dy: number) {
-    // this.x += dx;
-    // this.y += dy;
-  }
 }

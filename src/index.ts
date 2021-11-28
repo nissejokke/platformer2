@@ -1,7 +1,6 @@
 import { Context, Keys } from "./common.js";
 import { Man } from "./man.js";
 import { Obstacle } from "./obstacle.js";
-import Vector from "./vector.js";
 import { World } from "./world.js";
 
 export async function draw() {
@@ -72,6 +71,8 @@ export async function draw() {
   world.add(man);
   world.add(ground);
   world.add(new Obstacle(context, 100, canvas.offsetHeight - 80, 50, 50, 100000));
+  world.add(new Obstacle(context, 150, canvas.offsetHeight - 80-100, 50+100, 50, 100000));
+
 
   for (let n = 0; n < 2500; n++) {
     await world.draw();
