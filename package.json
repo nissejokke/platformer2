@@ -1,18 +1,18 @@
 {
-  "name": "Platformer",
+  "name": "Platformer2",
   "version": "1.0.0",
   "description": "Simple platformer game",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && serve dist",
-    "dev": "nodemon --exec 'npm start' -e ts && serve dist",
-    "build": "rm -rf dist && tsc --build tsconfig.json && cp src/index.html dist/",
+    "start": "concurrently --kill-others \"npm run build-watch\" \"serve dist\"",
+    "build-watch": "rm -rf dist && mkdir dist && cp src/index.html dist/ && tsc --build tsconfig.json -w",
     "test": "jest"
   },
   "author": "Johan",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^26.0.15",
+    "concurrently": "^6.4.0",
     "jest": "^26.6.1",
     "prettier": "^2.1.2",
     "serve": "^11.3.2",

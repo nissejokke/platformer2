@@ -116,8 +116,8 @@ export class World {
     // \-|  |
     //   \--/
 
-    const isClippingLeft = obj2.x < obj1.x && obj2.x + obj2.width >= obj1.x && obj1.x + obj1.width > obj2.x + obj2.width; 
-    const isClippingRight = obj1.x < obj2.x && obj1.x + obj1.width >= obj2.x && obj1.x + obj1.width < obj2.x + obj2.width;
+    const isClippingLeft = obj2.x < obj1.x && obj2.x + obj2.width >= obj1.x && obj1.x + obj1.width > obj2.x + obj2.width && obj2.x + obj2.width - obj1.x < 30; 
+    const isClippingRight = obj1.x < obj2.x && obj1.x + obj1.width >= obj2.x && obj1.x + obj1.width < obj2.x + obj2.width && obj1.x + obj1.width - obj2.x < 30;
     const isClippingDown = obj1.y < obj2.y && obj1.y + obj1.height >= obj2.y && obj2.y + obj2.height > obj1.y + obj1.height;
     const isClippingUp = obj2.y < obj1.y && obj2.y + obj2.height >= obj1.y && obj2.y + obj2.height < obj1.y + obj1.height;
 
@@ -127,10 +127,6 @@ export class World {
       obj1.y = obj2.y - obj1.height;
       obj1.isObjectCollisionBelow = true;
     }
-    else if (isClippingUp) {
-      obj1.force.y = 0;
-      obj1.y = obj2.y + obj2.height;
-    }
     else if (isClippingLeft) {
       obj1.force.x = 0;
       obj1.x = obj2.x + obj2.width;
@@ -138,6 +134,10 @@ export class World {
     else if (isClippingRight) {
       obj1.force.x = 0;
       obj1.x = obj2.x - obj1.width;
+    }
+    else if (isClippingUp) {
+      obj1.force.y = 0;
+      obj1.y = obj2.y + obj2.height;
     }
   }
 }
