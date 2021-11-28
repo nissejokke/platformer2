@@ -28,7 +28,11 @@ export class World {
       obj.addForces();
     }
     // update positions is before add object collisions because otherwise causes flicker
-    for (const obj of this.objs) this.updatePosition(obj);
+    for (const obj of this.objs) {
+      this.updatePosition(obj);
+      obj.x = Math.round(obj.x * 100) / 100;
+      obj.y = Math.round(obj.y * 100) / 100;
+    }
 
     for (const obj of this.objs) {
       this.addObjectToCollisionMap(obj);
@@ -38,7 +42,7 @@ export class World {
       obj.draw();
     }
 
-    await delay(25);
+    await delay(10);
   }
 
   updatePosition(obj: Objct) {
@@ -121,21 +125,19 @@ export class World {
     const isClippingDown = obj1.y < obj2.y && obj1.y + obj1.height >= obj2.y && obj2.y + obj2.height > obj1.y + obj1.height;
     const isClippingUp = obj2.y < obj1.y && obj2.y + obj2.height >= obj1.y && obj2.y + obj2.height < obj1.y + obj1.height;
 
-    console.log(obj1, obj2)
-
-    if (isClippingDown && obj1.force.y > 0) {
+    if (isClippingDown) {
       obj1.force.y = 0;
       // force obj1 position to prevent clipping into object
       obj1.y = obj2.y - obj1.height;
       obj1.isObjectCollisionBelow = true;
     }
-    else if (isClippingLeft && obj1.force.x < 0) {
-      obj1.force.x = 0;
-      obj1.x = obj2.x + obj2.width;
-    }
     else if (isClippingUp) {
       obj1.force.y = 0;
       obj1.y = obj2.y + obj2.height;
+    }
+    else if (isClippingLeft) {
+      obj1.force.x = 0;
+      obj1.x = obj2.x + obj2.width;
     }
     else if (isClippingRight) {
       obj1.force.x = 0;

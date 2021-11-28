@@ -27,7 +27,8 @@ export class Man implements Objct {
 
   addForces() {
 
-    const xForce = this.isObjectCollisionBelow ? this.context.groundForce : this.context.groundForce / 10;
+    // side force is lower if not in contact with ground
+    const xForce = this.isObjectCollisionBelow ? this.context.groundForce : this.context.groundForce / 2;
 
     // jump
     if (this.context.keys.ArrowUp && this.isObjectCollisionBelow) {
@@ -41,12 +42,13 @@ export class Man implements Objct {
       this.force.add(new Vector(-xForce, 0));
     }
 
-    this.force.add(new Vector(0, 2));
-    if (this.isObjectCollisionBelow)
+    this.force.add(new Vector(0, this.context.gravity));
+    if (this.isObjectCollisionBelow) {
       this.force.add(new Vector(-this.force.x * this.context.groundForceReduction, 0));
-    this.force.limitTo(this.context.airForceLimit);
-    this.force.limitTo(this.context.groundForceLimit);
-
+      this.force.limitTo(this.context.groundForceLimit);
+    }
+    else
+      this.force.limitTo(this.context.airForceLimit);
   }
 
   draw() {
@@ -54,11 +56,24 @@ export class Man implements Objct {
     const offsety = this.height / 2;
     const x = this.x + offsetx;
     const y = this.y + offsety;
-
-    this.context.ctx.fillStyle = 'black';
-    this.context.ctx.fillRect(this.x, this.y, this.width, this.height);
-    this.context.ctx.fillStyle = 'white';
-    this.context.ctx.fillRect(this.x + this.width / 5, this.y + this.height / 10, this.width / 5, this.height / 10);
-
+    const { ctx } = this.context;
+    const isLookingLeft = this.force.x < 0;
+    
+    const legheight = 7;
+    ctx.fillStyle = 'black';
+    ctx.fillRect(this.x, this.y, this.width, this.height - legheight);
+    
+    ctx.fillStyle = 'white';
+    ctx.fillRect(this.x + this.width / 5 + (isLookingLeft ? 0 : 2 * this.width / 5), this.y + this.height / 5, this.width / 5, this.height / 10);
+    
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 4;
+    const lookingRightAddition = isLookingLeft ? 0 : 10;
+    for (let i = 0; i < 2; i++) {
+      ctx.beginPath();
+      ctx.moveTo(this.x + this.width / (4-i*2) + lookingRightAddition, this.y + this.height - legheight);
+      ctx.lineTo(this.x + this.width / (4-i*2) + lookingRightAddition, this.y + this.height);
+      ctx.stroke();
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Context, Keys } from "./common.js";
-import { Man } from "./man.js";
+import { Man } from "./player.js";
 import { Obstacle } from "./obstacle.js";
 import { World } from "./world.js";
 
@@ -24,16 +24,16 @@ export async function draw() {
   });
 
   // speed multiplier
-  const speed = 10;
+  const speed = 3;
 
   // jump force
-  const jumpForce = speed * 2.5;
+  const jumpForce = speed * 10;
 
   // ground force, applied when in concat with ground
-  const groundForce = speed * 0.1;
+  const groundForce = speed * 0.15;
 
   // ground force limit
-  const groundForceLimit = speed * 10;
+  const groundForceLimit = speed * 5;
 
   // reduction of ground force every draw
   const groundForceReduction = 0.2;
@@ -42,7 +42,9 @@ export async function draw() {
   const airForce = speed * 0.75;
 
   // limit air movement
-  const airForceLimit = speed * 10;
+  const airForceLimit = speed * 5;
+
+  const gravity = speed * 0.33;
 
   var ctx = canvas.getContext("2d")!;
 
@@ -55,6 +57,7 @@ export async function draw() {
     groundForce,
     groundForceLimit,
     groundForceReduction,
+    gravity,
     keys
   };
 
@@ -63,15 +66,15 @@ export async function draw() {
   const ground = new Obstacle(
     context,
     0,
-    canvas.offsetHeight - 30,
+    canvas.offsetHeight - 50,
     canvas.width,
-    30,
+    50,
     100000
   );
   world.add(man);
   world.add(ground);
-  world.add(new Obstacle(context, 100, canvas.offsetHeight - 80, 50, 50, 100000));
-  world.add(new Obstacle(context, 150, canvas.offsetHeight - 80-100, 50+100, 50, 100000));
+  world.add(new Obstacle(context, 100, canvas.offsetHeight - 100, 50, 50, 100000));
+  world.add(new Obstacle(context, 150, canvas.offsetHeight - 100-100, 50+100, 50, 100000));
 
 
   for (let n = 0; n < 2500; n++) {

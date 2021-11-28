@@ -25,6 +25,8 @@ export interface Context {
 
   // limit air movement
   airForceLimit: number;
+
+  gravity: number;
 }
 
 export interface Point {
