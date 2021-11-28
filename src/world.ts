@@ -1,11 +1,10 @@
-import { Objct, delay, Context, Point } from "./common.js";
-import Vector from "./vector.js";
+import { Objct, delay, Context } from "./common.js";
 
 export class World {
   objs: Objct[];
   collisionMap: (Objct | undefined)[][];
-  collissionSizeX: number;
-  collissionSizeY: number;
+  collisionSizeX: number;
+  collisionSizeY: number;
 
   constructor(
     private context: Context,
@@ -13,8 +12,8 @@ export class World {
   ) {
     this.objs = [];
     this.collisionMap = [];
-    this.collissionSizeX = this.canvas.offsetWidth / 2;
-    this.collissionSizeY = this.canvas.offsetHeight / 2;
+    this.collisionSizeX = this.canvas.offsetWidth / 2;
+    this.collisionSizeY = this.canvas.offsetHeight / 2;
   }
 
   add(obj: Objct) {
@@ -59,16 +58,20 @@ export class World {
   }
 
   resetCollisionMap() {
-    for (let n = 0; n < this.collissionSizeX; n++) this.collisionMap[n] = [];
+    for (let n = 0; n < this.collisionSizeX; n++) this.collisionMap[n] = [];
   }
 
+  /**
+   * Adds object to collision map and handles collisions
+   * @param obj 
+   */
   addObjectToCollisionMap(obj: Objct) {
     const worldWidth = this.canvas.offsetWidth;
     const worldHeight = this.canvas.offsetHeight;
 
     // how many pixels on map is a "pixel" in collision map
-    const stepX = Math.round(worldWidth / this.collissionSizeX);
-    const stepY = Math.round(worldHeight / this.collissionSizeY);
+    const stepX = Math.round(worldWidth / this.collisionSizeX);
+    const stepY = Math.round(worldHeight / this.collisionSizeY);
     
     obj.isObjectCollisionBelow = false;
     const collidedObjects: [Objct, Objct][] = [];
@@ -76,8 +79,8 @@ export class World {
     for (let x = obj.x; x < obj.x + obj.width; x += stepX) {
       for (let y = obj.y; y < obj.y + obj.height; y += stepY) {
         // object position in steps
-        const xx = Math.round(this.collissionSizeX * (x / worldWidth));
-        const yy = Math.round(this.collissionSizeY * (y / worldHeight));
+        const xx = Math.round(this.collisionSizeX * (x / worldWidth));
+        const yy = Math.round(this.collisionSizeY * (y / worldHeight));
 
         if (xx >= 0 && xx < this.collisionMap.length && yy >= 0) {
           const isCollisionWithOtherObject = this.collisionMap[xx][yy] && this.collisionMap[xx][yy] !== obj;
@@ -97,23 +100,16 @@ export class World {
         }
       }
     }
-    // this.ctx.font = "30px serif";
-    // this.ctx.fillText(
-    //   `${xval.join(",")}x${yval.join(",")}`,
-    //   obj.x,
-    //   obj.y - 20,
-    //   200
-    // );
-    // console.log(xval, yval);
   }
 
   /**
-   * 
+   * Handle two objects collision
    * @param obj1 
-   * @param obj2 the more massive object
+   * @param obj2 will be the more massive object
    * @returns 
    */
   collide(obj1: Objct, obj2: Objct): void {
+    // Two objects clipping:
     // /--\
     // | /--\
     // | |  |
@@ -125,9 +121,9 @@ export class World {
     const isClippingDown = obj1.y < obj2.y && obj1.y + obj1.height >= obj2.y && obj2.y + obj2.height > obj1.y + obj1.height;
     const isClippingUp = obj2.y < obj1.y && obj2.y + obj2.height >= obj1.y && obj2.y + obj2.height < obj1.y + obj1.height;
 
+    // force obj position to prevent clipping into object
     if (isClippingDown) {
       obj1.force.y = 0;
-      // force obj1 position to prevent clipping into object
       obj1.y = obj2.y - obj1.height;
       obj1.isObjectCollisionBelow = true;
     }

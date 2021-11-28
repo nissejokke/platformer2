@@ -1,4 +1,4 @@
-import { Context, Keys, Objct, Point } from "./common.js";
+import { Context, Objct } from "./common.js";
 import Vector from "./vector.js";
 
 export class Man implements Objct {
@@ -43,6 +43,7 @@ export class Man implements Objct {
     }
 
     this.force.add(new Vector(0, this.context.gravity));
+
     if (this.isObjectCollisionBelow) {
       this.force.add(new Vector(-this.force.x * this.context.groundForceReduction, 0));
       this.force.limitTo(this.context.groundForceLimit);
@@ -59,13 +60,16 @@ export class Man implements Objct {
     const { ctx } = this.context;
     const isLookingLeft = this.force.x < 0;
     
+    // body
     const legheight = 7;
     ctx.fillStyle = 'black';
     ctx.fillRect(this.x, this.y, this.width, this.height - legheight);
     
+    // eye
     ctx.fillStyle = 'white';
     ctx.fillRect(this.x + this.width / 5 + (isLookingLeft ? 0 : 2 * this.width / 5), this.y + this.height / 5, this.width / 5, this.height / 10);
     
+    // legs
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
     const lookingRightAddition = isLookingLeft ? 0 : 10;

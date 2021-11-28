@@ -42,6 +42,7 @@ export class Obstacle implements Objct {
       ctx.stroke();
     }
 
+    // dirt dots to make more live dirt
     // ctx.strokeStyle = '#795548';
     // ctx.lineWidth = 2;
     // for (let i = 0; i < this.width; i+=10) {
