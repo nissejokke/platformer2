@@ -21,7 +21,11 @@ export class Obstacle implements Objct {
     // no forces added to obstacle
   }
   draw(): void {
+    const grassheight = 7;
+    this.context.ctx.fillStyle = 'green';
+    this.context.ctx.fillRect(this.x, this.y, this.width, grassheight);
+
     this.context.ctx.fillStyle = '#795548';
-    this.context.ctx.fillRect(this.x, this.y, this.width, this.height);
+    this.context.ctx.fillRect(this.x, this.y + grassheight, this.width, this.height);
   }
 }
