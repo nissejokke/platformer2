@@ -73,7 +73,7 @@ export class World {
     const stepX = Math.round(worldWidth / this.collisionSizeX);
     const stepY = Math.round(worldHeight / this.collisionSizeY);
     
-    obj.isObjectCollisionBelow = false;
+    obj.isInConcactWithGround = false;
     const collidedObjects: [Objct, Objct][] = [];
 
     for (let x = obj.x; x < obj.x + obj.width; x += stepX) {
@@ -125,7 +125,7 @@ export class World {
     if (isClippingDown) {
       obj1.force.y = 0;
       obj1.y = obj2.y - obj1.height;
-      obj1.isObjectCollisionBelow = true;
+      obj1.isInConcactWithGround = true;
     }
     else if (isClippingLeft) {
       obj1.force.x = 0;

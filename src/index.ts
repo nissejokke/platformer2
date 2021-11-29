@@ -1,5 +1,5 @@
-import { Context, Keys } from "./common.js";
-import { Man } from "./player.js";
+import { Context, Keys, Movable, Objct } from "./common.js";
+import { Creature } from "./creature.js";
 import { Obstacle } from "./obstacle.js";
 import { World } from "./world.js";
 
@@ -62,17 +62,12 @@ export async function draw() {
   };
 
   const world = new World(context, canvas);
-  const man = new Man(context, 250, 250);
-  const ground = new Obstacle(
-    context,
-    0,
-    canvas.offsetHeight - 50,
-    canvas.width,
-    50,
-    100000
-  );
-  world.add(man);
+  
+  const player = new Creature(context, 250, 250);
+  const ground = new Obstacle(context, 0, canvas.offsetHeight - 50, canvas.width, 50, 100000);
+  world.add(player);
   world.add(ground);
+
   world.add(new Obstacle(context, 100, canvas.offsetHeight - 100, 50, 50, 100000));
   world.add(new Obstacle(context, 150, canvas.offsetHeight - 200, 50 + 100, 50, 100000));
   world.add(new Obstacle(context, 360, canvas.offsetHeight - 200, 50 + 100, 50, 100000));
@@ -80,6 +75,13 @@ export async function draw() {
 
 
   for (let n = 0; n < 2500; n++) {
+    applyControls(player, context);
     await world.draw();
   }
+}
+
+function applyControls(player: Movable, context: Context) {
+  if (context.keys.ArrowUp) player.jump();
+  if (context.keys.ArrowRight) player.moveRight();
+  else if (context.keys.ArrowLeft) player.moveLeft();
 }

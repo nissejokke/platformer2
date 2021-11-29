@@ -3,7 +3,7 @@ import Vector from "./vector.js";
 
 export class Obstacle implements Objct {
   force: Vector;
-  isObjectCollisionBelow: boolean;
+  isInConcactWithGround: boolean;
   constructor(
     private context: Context,
     public x: number,
@@ -13,7 +13,7 @@ export class Obstacle implements Objct {
     public mass: number
   ) {
     this.force = new Vector(0, 0);
-    this.isObjectCollisionBelow = false;
+    this.isInConcactWithGround = false;
   }
   collision(obj1: Objct, obj2: Objct): void {}
   

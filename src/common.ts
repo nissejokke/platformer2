@@ -43,10 +43,16 @@ export interface Mass {
   mass: number;
 }
 
+export interface Movable {
+  moveLeft(): void;
+  moveRight(): void;
+  jump(): void;
+}
+
 export type Keys = Record<string, boolean>;
 
 export interface Objct extends Point, Size, Mass {
-  isObjectCollisionBelow: boolean;
+  isInConcactWithGround: boolean;
   force: Vector;
   draw(): void;
   addForces(): void;

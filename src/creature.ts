@@ -1,7 +1,7 @@
-import { Context, Objct } from "./common.js";
+import { Context, Movable, Objct } from "./common.js";
 import Vector from "./vector.js";
 
-export class Man implements Objct {
+export class Creature implements Objct, Movable {
   scale: number;
   x: number;
   y: number;
@@ -10,7 +10,7 @@ export class Man implements Objct {
   mass: number;
   force: Vector;
   drawCounter: number;
-  isObjectCollisionBelow: boolean;
+  isInConcactWithGround: boolean;
 
   constructor(private context: Context, x: number, y: number) {
     this.x = x;
@@ -21,30 +21,35 @@ export class Man implements Objct {
     this.mass = 10;
     this.force = new Vector(0, 0);
     this.drawCounter = 0;
-    this.isObjectCollisionBelow = false;
+    this.isInConcactWithGround = false;
   }
   collision(obj1: Objct, obj2: Objct): void {}
 
-  addForces() {
+  moveLeft() {
+    const xForce = this.getXForce();
+    this.force.add(new Vector(-xForce, 0));
+  }
 
-    // side force is lower if not in contact with ground
-    const xForce = this.isObjectCollisionBelow ? this.context.groundForce : this.context.groundForce / 2;
+  moveRight() {
+    const xForce = this.getXForce();
+    this.force.add(new Vector(xForce, 0));
+  }
 
-    // jump
-    if (this.context.keys.ArrowUp && this.isObjectCollisionBelow) {
+  jump() {
+    if (this.isInConcactWithGround)
       this.force.add(new Vector(0, -this.context.jumpForce));
-    }
-    // move right
-    if (this.context.keys.ArrowRight) {
-      this.force.add(new Vector(xForce, 0));
-      // move left
-    } else if (this.context.keys.ArrowLeft) {
-      this.force.add(new Vector(-xForce, 0));
-    }
+  }
 
+  private getXForce() {
+      // side force is lower if not in contact with ground
+      const xForce = this.isInConcactWithGround ? this.context.groundForce : this.context.groundForce / 2;
+      return xForce;
+  }
+
+  addForces() {
     this.force.add(new Vector(0, this.context.gravity));
 
-    if (this.isObjectCollisionBelow) {
+    if (this.isInConcactWithGround) {
       this.force.add(new Vector(-this.force.x * this.context.groundForceReduction, 0));
       this.force.limitTo(this.context.groundForceLimit);
     }
@@ -59,6 +64,7 @@ export class Man implements Objct {
     const y = this.y + offsety;
     const { ctx } = this.context;
     const isLookingLeft = this.force.x < 0;
+    const isLookingRight = this.force.x > 0;
     
     // body
     const legheight = 7;
@@ -67,16 +73,29 @@ export class Man implements Objct {
     
     // eye
     ctx.fillStyle = 'white';
-    ctx.fillRect(this.x + this.width / 5 + (isLookingLeft ? 0 : 2 * this.width / 5), this.y + this.height / 5, this.width / 5, this.height / 10);
+    let eyeOffset: number;
+    if (isLookingLeft)
+      eyeOffset = 0;
+    else if (isLookingRight)
+      eyeOffset = 2 * this.width / 5;
+    else
+      eyeOffset = this.width / 5;
+    ctx.fillRect(this.x + this.width / 5 + eyeOffset, this.y + this.height / 5, this.width / 5, this.height / 10);
     
     // legs
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
-    const lookingRightAddition = isLookingLeft ? 0 : 10;
+    let legOffset: number;
+    if (isLookingLeft)
+      legOffset = 0;
+    else if (isLookingRight)
+      legOffset = 15;
+    else
+      legOffset = 8;
     for (let i = 0; i < 2; i++) {
       ctx.beginPath();
-      ctx.moveTo(this.x + this.width / (4-i*2) + lookingRightAddition, this.y + this.height - legheight);
-      ctx.lineTo(this.x + this.width / (4-i*2) + lookingRightAddition, this.y + this.height);
+      ctx.moveTo(this.x + this.width / (4-i*2) + legOffset, this.y + this.height - legheight);
+      ctx.lineTo(this.x + this.width / (4-i*2) + legOffset, this.y + this.height);
       ctx.stroke();
     }
   }
