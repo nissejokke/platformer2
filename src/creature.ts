@@ -1,4 +1,4 @@
-import { Context, Movable, Objct } from "./common.js";
+import { calculateClip, Context, Movable, Objct } from "./common.js";
 import Vector from "./vector.js";
 
 export class Creature implements Objct, Movable {
@@ -23,7 +23,37 @@ export class Creature implements Objct, Movable {
     this.drawCounter = 0;
     this.isInConcactWithGround = false;
   }
-  collision(obj1: Objct, obj2: Objct): void {}
+  collision(obj: Objct): void {
+    // Two objects clipping:
+    // /--\
+    // | /--\
+    // | |  |
+    // \-|  |
+    //   \--/
+
+    const obj1 = this;
+    const obj2 = obj;
+    const { isClippingDown, isClippingLeft, isClippingRight, isClippingUp } = calculateClip(obj1, obj2);
+
+    // force obj position to prevent clipping into object
+    if (isClippingDown) {
+      obj1.force.y = 0;
+      obj1.y = obj2.y - obj1.height;
+      obj1.isInConcactWithGround = true;
+    }
+    else if (isClippingLeft) {
+      obj1.force.x = 0;
+      obj1.x = obj2.x + obj2.width;
+    }
+    else if (isClippingRight) {
+      obj1.force.x = 0;
+      obj1.x = obj2.x - obj1.width;
+    }
+    else if (isClippingUp) {
+      obj1.force.y = 0;
+      obj1.y = obj2.y + obj2.height;
+    }
+  }
 
   moveLeft() {
     const xForce = this.getXForce();

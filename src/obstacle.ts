@@ -1,4 +1,4 @@
-import { Context, Objct } from "./common.js";
+import { calculateClip, Context, Objct } from "./common.js";
 import Vector from "./vector.js";
 
 export class Obstacle implements Objct {
@@ -15,10 +15,13 @@ export class Obstacle implements Objct {
     this.force = new Vector(0, 0);
     this.isInConcactWithGround = false;
   }
-  collision(obj1: Objct, obj2: Objct): void {}
+  collision(obj: Objct): void {
+    
+  }
   
   addForces(): void {
     // no forces added to obstacle
+    // this.force.add(new Vector(0, this.context.gravity));
   }
   draw(): void {
     const { ctx } = this.context;

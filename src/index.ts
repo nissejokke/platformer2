@@ -73,6 +73,7 @@ export async function draw() {
   world.add(new Obstacle(context, 360, canvas.offsetHeight - 200, 50 + 100, 50, 100000));
   world.add(new Obstacle(context, 650, canvas.offsetHeight - 250, 50 + 100, 50, 100000));
 
+  world.add(new Obstacle(context, 650, canvas.offsetHeight - 100, 50, 50, 1));
 
   for (let n = 0; n < 2500; n++) {
     applyControls(player, context);

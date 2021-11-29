@@ -56,9 +56,25 @@ export interface Objct extends Point, Size, Mass {
   force: Vector;
   draw(): void;
   addForces(): void;
-  collision(obj1: Objct, obj2: Objct): void;
+  collision(obj: Objct): void;
 }
 
 export async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export interface Clip { 
+  isClippingLeft: boolean; 
+  isClippingRight: boolean;
+  isClippingUp: boolean; 
+  isClippingDown: boolean; 
+};
+
+export function calculateClip(obj1: Objct, obj2: Objct): Clip {
+  const isClippingLeft = obj2.x < obj1.x && obj2.x + obj2.width >= obj1.x && obj1.x + obj1.width > obj2.x + obj2.width && obj2.x + obj2.width - obj1.x < 25; 
+  const isClippingRight = obj1.x < obj2.x && obj1.x + obj1.width >= obj2.x && obj1.x + obj1.width < obj2.x + obj2.width && obj1.x + obj1.width - obj2.x < 25;
+  const isClippingDown = obj1.y < obj2.y && obj1.y + obj1.height >= obj2.y && obj2.y + obj2.height > obj1.y + obj1.height;
+  const isClippingUp = obj2.y < obj1.y && obj2.y + obj2.height >= obj1.y && obj2.y + obj2.height < obj1.y + obj1.height;
+
+  return { isClippingLeft, isClippingRight, isClippingUp, isClippingDown };
 }
