@@ -29,7 +29,7 @@ export async function draw() {
   // jump force
   const jumpForce = speed * 10;
 
-  // ground force, applied when in concat with ground
+  // ground force, applied when in contact with ground
   const groundForce = speed * 0.15;
 
   // ground force limit
@@ -64,16 +64,16 @@ export async function draw() {
   const world = new World(context, canvas);
   
   const player = new Creature(context, 250, 250);
-  const ground = new Obstacle(context, 0, canvas.offsetHeight - 50, canvas.width, 50, 100000);
+  const ground = new Obstacle(context, 0, canvas.offsetHeight - 50, canvas.width, 50, 1e8);
   world.add(player);
   world.add(ground);
 
-  world.add(new Obstacle(context, 100, canvas.offsetHeight - 100, 50, 50, 100000));
-  world.add(new Obstacle(context, 150, canvas.offsetHeight - 200, 50 + 100, 50, 100000));
-  world.add(new Obstacle(context, 360, canvas.offsetHeight - 200, 50 + 100, 50, 100000));
-  world.add(new Obstacle(context, 650, canvas.offsetHeight - 250, 50 + 100, 50, 100000));
+  world.add(new Obstacle(context, 100, canvas.offsetHeight - 100, 50, 50, 1e8));
+  world.add(new Obstacle(context, 150, canvas.offsetHeight - 200, 50 + 100, 50, 1e8));
+  world.add(new Obstacle(context, 360, canvas.offsetHeight - 200, 50 + 100, 50, 1e8));
+  world.add(new Obstacle(context, 650, canvas.offsetHeight - 250, 50 + 100, 50, 1e8));
 
-  world.add(new Obstacle(context, 650, canvas.offsetHeight - 100, 50, 50, 1));
+  // world.add(new Obstacle(context, 650, canvas.offsetHeight - 100, 50, 50, 1));
 
   for (let n = 0; n < 2500; n++) {
     applyControls(player, context);

@@ -11,6 +11,7 @@ export class Creature implements Objct, Movable {
   force: Vector;
   drawCounter: number;
   isInConcactWithGround: boolean;
+  facingLeft: boolean;
 
   constructor(private context: Context, x: number, y: number) {
     this.x = x;
@@ -22,6 +23,7 @@ export class Creature implements Objct, Movable {
     this.force = new Vector(0, 0);
     this.drawCounter = 0;
     this.isInConcactWithGround = false;
+    this.facingLeft = false;
   }
   collision(obj: Objct): void {
     // Two objects clipping:
@@ -66,8 +68,9 @@ export class Creature implements Objct, Movable {
   }
 
   jump() {
-    if (this.isInConcactWithGround)
+    if (this.isInConcactWithGround) {
       this.force.add(new Vector(0, -this.context.jumpForce));
+    }
   }
 
   private getXForce() {
@@ -93,8 +96,8 @@ export class Creature implements Objct, Movable {
     const x = this.x + offsetx;
     const y = this.y + offsety;
     const { ctx } = this.context;
-    const isLookingLeft = this.force.x < 0;
-    const isLookingRight = this.force.x > 0;
+    const previoslyFacingLeft = this.facingLeft;
+    this.facingLeft = this.force.x === 0 ? previoslyFacingLeft : this.force.x < 0;
     
     // body
     const legheight = 7;
@@ -104,24 +107,22 @@ export class Creature implements Objct, Movable {
     // eye
     ctx.fillStyle = 'white';
     let eyeOffset: number;
-    if (isLookingLeft)
+    if (this.facingLeft)
       eyeOffset = 0;
-    else if (isLookingRight)
+    else 
       eyeOffset = 2 * this.width / 5;
-    else
-      eyeOffset = this.width / 5;
+      
     ctx.fillRect(this.x + this.width / 5 + eyeOffset, this.y + this.height / 5, this.width / 5, this.height / 10);
     
     // legs
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
     let legOffset: number;
-    if (isLookingLeft)
+    if (this.facingLeft)
       legOffset = 0;
-    else if (isLookingRight)
-      legOffset = 15;
     else
-      legOffset = 8;
+      legOffset = 15;
+      
     for (let i = 0; i < 2; i++) {
       ctx.beginPath();
       ctx.moveTo(this.x + this.width / (4-i*2) + legOffset, this.y + this.height - legheight);
