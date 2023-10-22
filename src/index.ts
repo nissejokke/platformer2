@@ -1,4 +1,4 @@
-import { Context, Keys, Movable, Objct } from "./common.js";
+import { Context, Keys, Movable, Objct, delay } from "./common.js";
 import { Creature } from "./creature.js";
 import { Obstacle } from "./obstacle.js";
 import { World } from "./world.js";
@@ -76,8 +76,17 @@ export async function draw() {
   // world.add(new Obstacle(context, 650, canvas.offsetHeight - 100, 50, 50, 1));
 
   for (let n = 0; n < 2500; n++) {
+    const time = new Date();
+
     applyControls(player, context);
-    await world.draw();
+    world.draw();
+
+    // wait time to be certain frames per seconds
+    const framesPerSecond = 70;
+    const elapsed = new Date().getTime() - time.getTime();
+    const frameLength = 1000 / framesPerSecond;
+    const timeToWait = frameLength - elapsed;
+    await delay(timeToWait);
   }
 }
 

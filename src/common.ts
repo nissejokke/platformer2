@@ -49,7 +49,7 @@ export interface Movable {
   jump(): void;
 }
 
-export type Keys = Record<string, boolean>;
+export type Keys = Record<KeyboardEvent['code'], boolean>;
 
 export interface Objct extends Point, Size, Mass {
   isInConcactWithGround: boolean;

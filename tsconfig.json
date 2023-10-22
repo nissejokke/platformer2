@@ -2,7 +2,6 @@
     "compilerOptions": {
         "outDir": "dist",
         "incremental": false,
-        // "tsBuildInfoFile": "./node_modules/.cache/.tsbuildinfo",
         "target": "esnext",
         "lib": [
             "dom",

@@ -25,6 +25,7 @@ export class Creature implements Objct, Movable {
     this.isInConcactWithGround = false;
     this.facingLeft = false;
   }
+  
   collision(obj: Objct): void {
     // Two objects clipping:
     // /--\
@@ -35,7 +36,7 @@ export class Creature implements Objct, Movable {
 
     const obj1 = this;
     const obj2 = obj;
-    const { isClippingDown, isClippingLeft, isClippingRight, isClippingUp } = calculateClip(obj1, obj2);
+    const { isClippingDown, isClippingLeft, isClippingRight, isClippingUp } = calculateClip(obj1, obj2);
 
     // force obj position to prevent clipping into object
     if (isClippingDown) {

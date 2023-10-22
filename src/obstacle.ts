@@ -24,7 +24,7 @@ export class Obstacle implements Objct {
     // this.force.add(new Vector(0, this.context.gravity));
   }
   draw(): void {
-    const { ctx } = this.context;
+    const { ctx } = this.context;
     const grassheight = 7;
 
     // grass

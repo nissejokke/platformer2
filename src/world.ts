@@ -42,8 +42,6 @@ export class World {
     for (const obj of this.objs) {
       obj.draw();
     }
-
-    await delay(10);
   }
 
   updatePosition(obj: Objct) {

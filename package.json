@@ -1,22 +1,17 @@
 {
-  "name": "Platformer2",
+  "name": "platformer2",
   "version": "1.0.0",
-  "description": "Simple platformer game",
+  "description": "Platformer game experiment",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently --kill-others \"npm run build-watch\" \"serve dist\"",
-    "build-watch": "rm -rf dist && mkdir dist && cp src/index.html dist/ && tsc --build tsconfig.json -w",
-    "test": "jest"
+    "start": "bunx serve & bun build ./src/index.ts --outdir ./dist --watch"
   },
   "author": "Johan",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^26.0.15",
-    "concurrently": "^6.4.0",
-    "jest": "^26.6.1",
-    "prettier": "^2.1.2",
-    "serve": "^11.3.2",
-    "ts-jest": "^26.4.3",
-    "typescript": "^4.0.5"
+    "prettier": "^2.1.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }
